@@ -19,3 +19,4 @@ As the Software Architect, I worked alongside four other software developers to 
 - **Requirements Change Analysis**: Evaluating and implementing changes in software requirements.
 - **Database Management and Configuration**: Overseeing the setup and maintenance of databases, ensuring data integrity and security.
 - **Software Maintenance**: Providing ongoing support and updates to the application post-deployment.
+ 
