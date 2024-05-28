@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% block content %}
+<head>
+    <meta charset="UTF-8">
+    <title>Report a Driver</title>
+</head>
+<body class="d-flex justify-content-center align-items-center vh-100 bg-light">
+    <div class="container">
+        <div class="row justify-content-center align-items-center h-100">
+            <div class="col-12 col-lg-9 col-xl-7">
+                <div class="card shadow card-registration" style="border-radius: 15px;">
+                    <div class="card-body p-4 p-md-5">
+                        <h2 class="text-center mb-4">Upload Driver Data</h2>
+                        <form id="driverForm" method="post" enctype="multipart/form-data">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <div class="text-center mt-4">
+                                <button id="submitButton" class="btn btn-secondary btn-lg" type="submit" data-bs-toggle="tooltip" title="Please input some information to submit">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var form = document.getElementById('driverForm');
+        var submitButton = document.getElementById('submitButton');
+
+        // default tooltip title
+        submitButton.setAttribute('title', 'Please input some information to submit');
+
+        form.addEventListener('input', function() {
+            var inputs = form.querySelectorAll('input[type="text"], textarea');
+            var files = form.querySelectorAll('input[type="file"]');
+            var filled = false;
+
+            inputs.forEach(function(input) {
+                if (input.value.trim() !== '') {
+                    filled = true;
+                }
+            });
+
+            files.forEach(function(file) {
+                if (file.files.length > 0) {
+                    filled = true;
+                }
+            });
+
+            if (filled) {
+                submitButton.classList.remove('btn-secondary');
+                submitButton.classList.add('btn-primary');
+                submitButton.removeAttribute('title');
+            } else {
+                submitButton.classList.remove('btn-primary');
+                submitButton.classList.add('btn-secondary');
+                submitButton.setAttribute('title', 'Please input some information to submit');
+            }
+
+            // Initialize Bootstrap tooltip
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+        });
+
+        // Prevent form submission if the button is not submittable
+        form.addEventListener('submit', function(event) {
+            if (!submitButton.classList.contains('btn-primary')) {
+                event.preventDefault();
+                alert('Please input some information to submit');
+            }
+        });
+    });
+
+    // Initialize Bootstrap tooltip when the page loads
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl);
+    });
+</script>
+
+    {% bootstrap_javascript %}
+</body>
+{% endblock %}

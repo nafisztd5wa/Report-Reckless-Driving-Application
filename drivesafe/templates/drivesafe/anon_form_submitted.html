@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load bootstrap5 %}
+
+{% block content %}
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Report Submitted</title>
+  {% bootstrap_css %}
+</head>
+<body>
+  <div class="container">
+    <div class="row justify-content-center mt-5">
+      <div class="col-md-8 text-center">
+        <div class="alert alert-success" role="alert">
+          <h2 class="display-6">Your report has been successfully submitted!</h2>
+        </div>
+        <a href="{% url 'drivesafe:index' %}" class="btn btn-primary btn-lg mt-3">Go to Home Page</a>
+      </div>
+    </div>
+  </div>
+
+  {% bootstrap_javascript %}
+</body>
+</html>
+{% endblock %}

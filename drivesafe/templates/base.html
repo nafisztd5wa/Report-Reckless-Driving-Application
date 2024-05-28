@@ -1,0 +1,156 @@
+{% load bootstrap5 %}
+{% bootstrap_css %}
+{% load socialaccount %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"/>
+    <style>
+        .divider:after,
+        .divider:before {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: darkgray;
+        }
+        /* Additional styles as needed */
+        .content-wrapper {
+            flex: 1;
+        }
+        .gradient-custom {
+    /* fallback for old browsers */
+    background: #6a85b6;
+
+    /* Chrome 10-25, Safari 5.1-6 */
+    background: -webkit-linear-gradient(to right, rgba(106,133,182,0.5), rgba(186,200,224,0.5));
+
+    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: linear-gradient(to right, rgba(106,133,182,0.5), rgba(186,200,224,0.5))
+  }
+        .card-registration .select-input.form-control[readonly]:not([disabled]) {
+font-size: 1rem;
+line-height: 2.15;
+padding-left: .75em;
+padding-right: .75em;
+}
+.card-registration .select-arrow {
+top: 13px;
+}
+
+    </style>
+
+</head>
+<body class="gradient-custom d-flex flex-column min-vh-100">
+  <!-- Navbar -->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary shadow">
+  <!-- Container wrapper -->
+  <div class="container-fluid">
+    <!-- Toggle button -->
+    <button
+      data-mdb-collapse-init
+      class="navbar-toggler"
+      type="button"
+      data-mdb-target="#navbarSupportedContent"
+      aria-controls="navbarSupportedContent"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fas fa-bars"></i>
+    </button>
+
+    <!-- Collapsible wrapper -->
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <!-- Navbar brand -->
+      <a class="navbar-brand mt-2 mt-lg-0" href="{% url 'drivesafe:index' %}">
+         <i class="fas fa-car"></i>
+      </a>
+      <!-- Left links -->
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <!-- Other navbar links -->
+
+      <!-- Conditional rendering of dashboard link based on user's role -->
+      {% if user.is_authenticated %}
+        {% if user.is_staff and not user.is_superuser %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'drivesafe:admin_home' %}">Dashboard</a>
+          </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'drivesafe:submissions' %}">View Submitted Reports</a>
+          </li>
+             <li class="nav-item">
+            <a class="nav-link" href="{% url 'drivesafe:common_words' %}">Frequent Words</a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'drivesafe:regular_user_home' %}">Dashboard</a>
+          </li>
+            <li class="nav-item">
+            <a class="nav-link" href="{% url 'drivesafe:report' %}">Report a Driver</a>
+          </li>
+            <li class="nav-item">
+                <a class="nav-link" href="{% url 'drivesafe:user_submissions' %}">View Submissions</a>
+            </li>
+        {% endif %}
+            {% else %}
+        <!-- If user is not authenticated, display a link to the login page -->
+         <li class="nav-item">
+          <a class="nav-link" href="{% url 'drivesafe:anonymous_report' %}">Submit a Report</a>
+        </li>
+      {% endif %}
+    </ul>
+      <!-- Left links -->
+    </div>
+    <!-- Collapsible wrapper -->
+
+    <!-- Right elements -->
+    <div class="d-flex align-items-center">
+        {% if user.is_authenticated %}
+         <form action="{% url 'account_logout' %}" method="post" class="mt-3">
+            {% csrf_token %}
+            <button data-mdb-ripple-init type="submit" class="btn btn-primary me-3">Sign Out</button>
+        </form>
+        {% else %}
+        <form action="{% provider_login_url 'google' %}" method="post" class="mt-3">
+            {% csrf_token %}
+            <button data-mdb-ripple-init type="submit" class="btn btn-primary me-3">Log in With Google</button>
+        </form>
+        {% endif %}
+    </div>
+    <!-- Right elements -->
+  </div>
+  <!-- Container wrapper -->
+</nav>
+<!-- Navbar -->
+  {% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-info alert-dismissible fade show" role="alert" id="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        <script>
+            setTimeout(function() {
+                var alert = document.getElementById('alert');
+                alert.style.transition = 'opacity 0.5s';
+                alert.style.opacity = '0';
+                setTimeout(function() {
+                    alert.remove();
+                }, 500); // Remove the alert after the transition completes
+            }, 3000);
+        </script>
+    {% endfor %}
+{% endif %}
+    <div class="content-wrapper">
+        {% block content %}
+        {% endblock %}
+    </div>
+    <footer class="bg-body tertiary text-center text-lg-start">
+        <div class="text-center p-3" style="background-color: lightblue">
+            Drivesafe is an application built for a project in CS 3240 at UVA. This system is not monitored and therefore, no real information should be submitted. In cases of a real emergencies involving rash driving, please report it to the appropriate authority figures.
+        </div>
+    </footer>
+</body>
+</html>

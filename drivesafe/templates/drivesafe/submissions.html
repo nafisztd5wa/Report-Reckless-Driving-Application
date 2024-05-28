@@ -1,0 +1,151 @@
+
+    <!DOCTYPE html>
+    {% extends 'base.html' %}
+    {% load bootstrap5 %}
+
+    {% block content %}
+    <div class="box-outline">
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Submitted Files</title>
+        {% load bootstrap5 %}
+        {% bootstrap_css %}
+        <style>
+            /* Custom styles */
+            .section-header {
+                margin-top: 40px;
+                margin-bottom: 20px;
+                font-size: 24px;
+                font-weight: bold;
+                color: #333;
+            }
+
+            .button-container {
+                margin-bottom: 10px;
+            }
+
+            .button-container button {
+                margin-right: 10px;
+            }
+
+            .accordion-body p {
+                margin-bottom: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container mt-5">
+            <h1>Submitted Files</h1>
+
+            <h2 class="section-header">In Progress</h2>
+            {% for submission in submissions %}
+                {% if submission.status == 'In Progress' %}
+                    <div class="accordion accordion-flush">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="inprogress-heading{{ submission.id }}">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#inprogress-collapse{{ submission.id }}" aria-expanded="false" aria-controls="inprogress-collapse{{ submission.id }}">
+                                    <strong>User:</strong> {{ submission.user.username }}
+                                </button>
+                            </h2>
+                            <div id="inprogress-collapse{{ submission.id }}" class="accordion-collapse collapse" aria-labelledby="inprogress-heading{{ submission.id }}">
+                                <div class="accordion-body">
+                                    <div class="button-container">
+                                        <strong>Status:</strong>
+                                        <form action="{% url 'drivesafe:update_status_and_response' submission.id %}" method="post">
+                                            {% csrf_token %}
+                                            <select name="status" class="form-select mb-3">
+                                                {% for choice in submission.STATUS_CHOICES %}
+                                                    <option value="{{ choice.0 }}" {% if submission.status == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <strong>Admin Response:</strong>
+                                            <input type="text" name="admin_response" class="form-control mb-3" value="{{ submission.admin_response }}">
+                                            <button type="submit" class="btn btn-primary mb-3" name="action" value="update_both">Update Status & Response</button>
+                                        </form>
+                                    </div>
+                                    <div>
+                                        {% if submission.pdf_file %}
+                                            <a href="{{ submission.pdf_file.url }}" target="_blank" class="btn btn-primary">Download PDF</a>
+                                        {% endif %}
+                                        {% if submission.jpg_file %}
+                                            <a href="{{ submission.jpg_file.url }}" target="_blank" class="btn btn-primary">Download JPG</a>
+                                        {% endif %}
+                                        {% if submission.txt_file %}
+                                            <a href="{{ submission.txt_file.url }}" target="_blank" class="btn btn-primary">Download TXT</a>
+                                        {% endif %}
+                                    </div>
+                                    <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-top: 10px;">
+                                        <p>Location: {{ submission.location }}</p>
+                                        <p>Car Color: {{ submission.car_color }}</p>
+                                        <p>Car Model: {{ submission.car_model }}</p>
+                                        <p>Car Identifying Features: {{ submission.car_identifying_features }}</p>
+                                        <p>Driver Details: {{ submission.driver_details }}</p>
+                                        <p>Additional Information: {{ submission.additional_information }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+            <h2 class="section-header">Completed</h2>
+            {% for submission in submissions %}
+                {% if submission.status == 'Completed' %}
+                    <div class="accordion accordion-flush">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="completed-heading{{ submission.id }}">
+                                <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#completed-collapse{{ submission.id }}" aria-expanded="false" aria-controls="completed-collapse{{ submission.id }}">
+                                    <strong>User:</strong> {{ submission.user.username }}
+                                </button>
+                            </h2>
+                            <div id="completed-collapse{{ submission.id }}" class="accordion-collapse collapse" aria-labelledby="completed-heading{{ submission.id }}">
+                                <div class="accordion-body">
+                                    <div class="button-container">
+                                        <strong>Status:</strong>
+                                        <form action="{% url 'drivesafe:update_status_and_response' submission.id %}" method="post">
+                                            {% csrf_token %}
+                                            <select name="status" class="form-select mb-3">
+                                                {% for choice in submission.STATUS_CHOICES %}
+                                                    <option value="{{ choice.0 }}" {% if submission.status == choice.0 %}selected{% endif %}>{{ choice.1 }}</option>
+                                                {% endfor %}
+                                            </select>
+                                            <strong>Admin Response:</strong>
+                                            <input type="text" name="admin_response" class="form-control mb-3" value="{{ submission.admin_response }}">
+                                            <button type="submit" class="btn btn-primary mb-3" name="action" value="update_both">Update Status & Response</button>
+                                        </form>
+                                    </div>
+                                    <div>
+                                        {% if submission.pdf_file %}
+                                            <a href="{{ submission.pdf_file.url }}" target="_blank" class="btn btn-primary">Download PDF</a>
+                                        {% endif %}
+                                        {% if submission.jpg_file %}
+                                            <a href="{{ submission.jpg_file.url }}" target="_blank" class="btn btn-primary">Download JPG</a>
+                                        {% endif %}
+                                        {% if submission.txt_file %}
+                                            <a href="{{ submission.txt_file.url }}" target="_blank" class="btn btn-primary">Download TXT</a>
+                                        {% endif %}
+                                    </div>
+                                    <div style="border: 1px solid #ccc; border-radius: 5px; padding: 10px; margin-top: 10px;">
+                                        <p>Location: {{ submission.location }}</p>
+                                        <p>Car Color: {{ submission.car_color }}</p>
+                                        <p>Car Model: {{ submission.car_model }}</p>
+                                        <p>Car Identifying Features: {{ submission.car_identifying_features }}</p>
+                                        <p>Driver Details: {{ submission.driver_details }}</p>
+                                        <p>Additional Information: {{ submission.additional_information }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+        {% bootstrap_javascript %}
+    </body>
+    </html>
+
+</div>
+{% endblock %}

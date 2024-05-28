@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% load bootstrap5 %}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+{% block content %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Frequent Words</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .word-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .word-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            margin-bottom: 5px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .word-list li:nth-child(odd) {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Frequent Words</h1>
+        <ul class="word-list">
+            {% for word, count in common_words %}
+                {% if count >= 3 %}
+                    <li>
+                        <span>{{ word }}</span>
+                        <span>{{ count }}</span>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+        <a href="{% url 'drivesafe:admin_home' %}" class="btn btn-primary mt-3" role="button">Back to Admin Home</a>
+    </div>
+    {% bootstrap_javascript %}
+</body>
+</html>
+{% endblock %}

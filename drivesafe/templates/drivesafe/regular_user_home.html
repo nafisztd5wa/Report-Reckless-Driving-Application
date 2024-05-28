@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+{% extends 'base.html' %}
+{% block content %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome</title>
+    {% load bootstrap5 %}
+    {% bootstrap_css %}
+</head>
+<body>
+<div class="container">
+    <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+            <h1><em>Welcome</em>, {{ username }}!</h1>
+            {% if full_name %}
+                <p>Full name: {{ full_name }}</p>
+            {% endif %}
+            <div class="card mt-3 shadow" style="background-color: rgba(255, 255, 255, 0.3);">
+                <div class="card-body">
+                    <h5 class="card-title">Current Date and Time</h5>
+                    <p class="card-text" id="currentDateTime">{{ current_date_and_time }}</p>
+                </div>
+            </div>
+
+            <a href="{% url 'drivesafe:report' %}" class="btn btn-primary mt-3" role="button">Report a Driver</a>
+            <a href="{% url 'drivesafe:user_submissions' %}" class="btn btn-primary mt-3" role="button">View User Submissions</a>
+
+            <form action="{% url 'account_logout' %}" method="post" class="mt-3">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Sign Out</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% bootstrap_javascript %}
+<script>
+    // Update current date and time every second
+    setInterval(function() {
+        var now = new Date();
+        var dateTimeString = now.toLocaleString();
+        document.getElementById('currentDateTime').innerText = dateTimeString;
+    }, 1000);
+
+    // Initial update of date and time
+    var initialNow = new Date();
+    var initialDateTimeString = initialNow.toLocaleString();
+    document.getElementById('currentDateTime').innerText = initialDateTimeString;
+</script>
+</body>
+</html>
+{% endblock %}
