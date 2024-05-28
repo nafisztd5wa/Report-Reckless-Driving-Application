@@ -9,7 +9,7 @@ __Technologies:__ Django, Heroku, Postgres, SQLite, Amazon S3, GoogleAuth
 ### Project Overview
 DriveSafe is a web application designed to allow local Charlottesville residents to report cases of reckless driving near the University of Virginia (UVA) campus. The aim is to improve road safety by providing a platform for the community to report and address driving concerns.
 
-### My Role: Software Architect
+### Responsibilies:
 
 As the Software Architect, I worked alongside four other software developers to bring the DriveSafe project to life. My key responsibilities included:
 
